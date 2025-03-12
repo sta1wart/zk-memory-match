@@ -228,7 +228,7 @@ body {
   font-family: 'Gilroy', sans-serif;
   color: white;
   transition: background-color 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* об’ємність */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .control-buttons button:hover {
@@ -318,10 +318,10 @@ body {
 /* Tutorial overlay – покриває весь екран, роблячи фон гри 50% непрозорим */
 #tutorial-overlay {
   position: relative;
-  top: 277px; /* Центруємо по вертикалі */
-  left: 225px; /* Центруємо по горизонталі */
-  width: 450px; /* Ширина вікна гри */
-  height: 584px; /* Висота вікна гри */
+  top: 277px;
+  left: 225px;
+  width: 450px;
+  height: 584px;
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.5);
   display: none;
@@ -436,7 +436,7 @@ body {
 /* ===== Leaderboard Overlay Styles (аналогічно туторіалу) ===== */
 #leaderboard-overlay {
   position: relative;
-  top: 277px; /* Такий самий відступ, як і у tutorial-overlay */
+  top: 277px;
   left: 225px;
   width: 450px;
   height: 584px;
@@ -445,7 +445,7 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 110; /* трохи вище туторіалу, якщо вони накладуться */
+  z-index: 110;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -500,7 +500,7 @@ body {
   padding: 20px;
   font-family: 'Gilroy', sans-serif;
   font-size: 16px;
-  color: #ff009d; /* основний колір тексту */
+  color: #ff009d;
 }
 
 .leaderboard-row.header {
@@ -526,7 +526,6 @@ body {
 .leaderboard-moves {
   width: 33%;
   text-align: left;
-  /* можна додати text-align: center для rank/moves, якщо хочете */
 }
 
 .leaderboard-row.header .leaderboard-rank,
@@ -541,22 +540,22 @@ body {
   position: fixed;
   width: 100%;
   height: 900px;
-  background: rgba(0,0,0,0.7); /* фон на весь екран */
+  background: rgba(0,0,0,0.7);
   z-index: 1100;
 }
 
 #victory-window {
   position: fixed;
-    left: 50%;
-    top: 480px;
-    transform: translate(-50%, calc(-50% - 30px));
-    width: 410px;
-    height: 574px;
-    background: #ffff00;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+  left: 50%;
+  top: 480px;
+  transform: translate(-50%, calc(-50% - 30px));
+  width: 410px;
+  height: 574px;
+  background: #ffff00;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   padding: 20px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
