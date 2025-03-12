@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZK-Memory Match</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="ZK.png">
+
+  <!-- Firebase App (compatibility version) -->
+  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app-compat.js"></script>
+  <!-- Firebase Firestore (compatibility version) -->
+  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore-compat.js"></script>
+  <script>
+    // Ваша конфігурація Firebase (скопійована з консолі)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYrl9g1Pw3MgAnKITJCIIXkDXQSdHnpNU",
+      authDomain: "zk-memory-match.firebaseapp.com",
+      projectId: "zk-memory-match",
+      storageBucket: "zk-memory-match.firebasestorage.app",
+      messagingSenderId: "947025799512",
+      appId: "1:947025799512:web:8b9757bd5fe7719b2a5d2d",
+      measurementId: "G-N8PL4ZN55B"
+    };
+
+    // Ініціалізація Firebase
+    firebase.initializeApp(firebaseConfig);
+    // Ініціалізація Firestore
+    const db = firebase.firestore();
+  </script>
+</head>
+<body>
+  <!-- Login Modal -->
+  <div id="login-modal">
+    <div id="login-box">
+      <input type="text" id="nickname-input" placeholder="enter your nickname">
+      <button id="login-button">Login</button>
+    </div>
+  </div>
+
+  <audio id="backgroundMusic" loop>
+    <source src="images/Cipher.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div id="icon-bar">
+    <!-- Іконка гри -->
+    <div class="interactive-icon" id="start-icon">
+      <img src="images/logo.png" alt="Game Icon">
+      <div class="game-title">ZK-Memory Match</div>
+    </div>
+    <!-- Єдина іконка звуку -->
+    <div class="interactive-icon" id="volume-icon">
+      <img src="images/speaker_icon.png" alt="Volume Control">
+      <!-- Контейнер для двох повзунків, розташованих горизонтально -->
+      <div id="sound-sliders" style="display: none;">
+        <!-- Повзунок для музики -->
+        <div class="slider-block" id="music-slider-block">
+          <img src="images/music_icon.png" alt="Music" class="slider-icon">
+          <span id="volume-percentage-value" class="volume-percentage">50%</span>
+          <input type="range" min="0" max="100" value="50" class="volume-range" orient="vertical">
+        </div>
+        <!-- Повзунок для SFX -->
+        <div class="slider-block" id="sfx-slider-block">
+          <img src="images/sfx_icon.png" alt="SFX" class="slider-icon">
+          <span id="sfx-volume-percentage-value" class="volume-percentage">50%</span>
+          <input type="range" min="0" max="100" value="50" class="sfx-volume-range" orient="vertical">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальне вікно гри -->
+  <div id="game-modal" class="modal" style="display: none;">
+    <div class="modal-content game-window">
+      <div class="modal-header">
+        <h2>ZK-Memory Match</h2>
+        <button id="close-game-modal" class="close-button">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="control-buttons">
+          <button id="leaderboard-button" style="display: none;">Leaderboard</button>
+          <button id="tutorial-button" style="display: none;">Tutorial</button>
+          <button id="start-game-button">Start</button>
+          <button id="restart-button" style="display: none;">Restart</button>
+        </div>
+        <div id="moves-count" style="display: none;">Moves: 0</div>
+        <div id="game-board">
+          <!-- Ігрове поле буде згенеровано тут -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tutorial Overlay -->
+  <div id="tutorial-overlay" class="hidden">
+    <div id="tutorial-window">
+      <div class="tutorial-header"></div>
+      <div class="tutorial-content">
+        <h2>How to Play</h2>
+        <p>
+          You are presented with 16 face-down cards. Your goal is to find all matching pairs using the fewest moves.
+        </p>
+        <h3>Step 1: Flip Two Cards</h3>
+        <p>
+          Click on a card to reveal its image, then click a second card to try to find a match.
+        </p>
+        <h3>Step 2: Matching</h3>
+        <p>
+          If the cards match, they remain face-up. If they do not match, they will flip back down.
+        </p>
+        <h3>Step 3: Winning</h3>
+        <p>
+          The game ends when all pairs have been found. The fewer moves you make, the better your score!
+        </p>
+        <h3>Sound Settings</h3>
+        <p>
+          Use the sound icon to adjust background music and sound effects separately using the sliders.
+        </p>
+        <h3>Additional Options</h3>
+        <p>
+          The Restart button shuffles the cards and resets your move count, while the Close button exits the game.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaderboard Overlay -->
+  <div id="leaderboard-overlay" class="hidden">
+    <div id="leaderboard-window">
+      <div class="leaderboard-header">
+        <h2>Top Players</h2>
+      </div>
+      <div class="leaderboard-content">
+        <!-- Шапка таблиці -->
+        <div class="leaderboard-row header">
+          <span class="leaderboard-rank">RANK</span>
+          <span class="leaderboard-name">NAME</span>
+          <span class="leaderboard-moves">MOVES</span>
+        </div>
+        <!-- Сюди динамічно додаються результати -->
+        <div id="leaderboard-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Victory Modal -->
+  <div id="victory-modal" class="modal" style="display: none;">
+    <div id="victory-window">
+      <div class="victory-header">
+      </div>
+      <div class="victory-body">
+        <img src="images/cat.gif" alt="Victory Cat" class="victory-gif">
+        <p>Congratulations! You did it! Now share your result with others, create a proof, or play again.</p>
+        <div class="victory-buttons">
+          <button id="proof-button">Create Proof</button>
+          <button id="play-again-button">Play Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Скрипт гри -->
+  <script src="script.js"></script>
+</body>
+</html>
